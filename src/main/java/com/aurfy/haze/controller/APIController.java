@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONArray;
 import com.aurfy.haze.utils.HttpRequest;
 import com.aurfy.haze.utils.SecurityUtils;
+import com.aurfy.haze.utils.StringUtils;
 import com.aurfy.haze.web.vo.API.APIRefundReqVO;
 import com.aurfy.haze.web.vo.API.APISecurePayReqVO;
 import com.aurfy.haze.web.vo.API.APISecurePayRespVO;
@@ -112,8 +113,10 @@ public class APIController {
 			StringBuffer mdStr = new StringBuffer();
 			for (String key : keyList) {
 				String value = params.get(key)[0];
-				if (!key.equals("verify_sign") && params.get(key) != null && value != null && !value.equals("null")) {
-					mdStr.append(key + "=" + value + "&");
+				if(!StringUtils.isEmpty(value)){
+					if (!key.equals("verify_sign") && params.get(key) != null && value != null && !value.equals("null")) {
+						mdStr.append(key + "=" + value + "&");
+					}
 				}
 			}
 			logger.info("sign prams string:" + mdStr.toString());
@@ -157,29 +160,6 @@ public class APIController {
 					str.append("<br/>" + key + "=" + value);
 				}
 			}
-			Set<String> keySet = params.keySet();
-			List<String> keyList = new ArrayList<String>(keySet);
-			Collections.sort(keyList);
-			StringBuffer mdStr = new StringBuffer();
-			for (String key : keyList) {
-				String value = params.get(key)[0];
-				if (!key.equals("verify_sign") && params.get(key) != null && value != null && !value.equals("null")) {
-					mdStr.append(key + "=" + value + "&");
-				}
-			}
-			logger.info("sign prams string:" + mdStr.toString());
-			mdStr.append(SecurityUtils.MD5(token).toLowerCase());
-			logger.info("prams and token sign string:" + mdStr.toString());
-			String verify_sign = params.get("verify_sign")[0];
-			String sign = SecurityUtils.MD5(mdStr.toString()).toLowerCase();
-			logger.info("sign string:" + sign);
-			logger.info("verify_sign string:" + verify_sign);
-			if (sign.equals(verify_sign)) {
-				str.append("<br/>sign_vlidated -> true");
-			} else {
-				str.append("<br/>sign_vlidated -> false");
-			}
-			logger.info("Callback " + str.toString());
 			return new ModelAndView("callback", "result", str.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -246,4 +226,5 @@ public class APIController {
 		str.append("\r\n ----------End Request---------------");
 		return str.toString();
 	}
+	
 }
