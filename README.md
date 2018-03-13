@@ -1,2 +1,2 @@
 # hantepayapi_java_demo
-HantePay API SDK
+HantePay API Demo
