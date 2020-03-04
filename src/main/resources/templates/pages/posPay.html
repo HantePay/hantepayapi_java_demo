@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+    <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
+    <meta name="x5-orientation" content="portrait" />
+    <meta name="screen-orientation" content="portrait" />
+    <title>线下扫码支付</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/js/bootstrap.min.js">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/jquery.jsonview.js"></script>
+    <script type="text/javascript" src="/js/jsonview.js"></script>
+    <script type="text/javascript" src="/js/demo.js"></script>
+    <link rel="stylesheet" href="/css/jsonview.css">
+    <style type="text/css">
+        .responseBody {
+            border: 1px solid #bbbbbb;
+            border-radius: 4px;
+            color: #333333;
+            font-size: 14px;
+            height: 180px;
+            line-height: 1.6;
+            overflow-x: auto;
+            overflow-y: scroll;
+            padding: 14px;
+            position: relative;
+            width: 100%;
+            word-wrap: break-word;
+            margin: 30px 0px;
+        }
+        #jsonView{
+            width:100%;
+            clear:both;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3>线下扫码支付请求表单</h3>
+    <form action="/posPay" id="apiForm"  class="form-horizontal" method="POST">
+        <div class="form-group">
+            <label for="out_trade_no" class="col-sm-2 control-label">Order No*</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="out_trade_no" name="out_trade_no"  required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="payment_method" class="col-sm-2 control-label">Payment Method*</label>
+            <div class="col-sm-10">
+                <select name="payment_method" id="payment_method" class="form-control" required>
+                    <option value='wechatpay'>wechatpay</option>
+                    <option value='alipay'>alipay</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="nonce_str" class="col-sm-2 control-label">Nonce Str*</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="nonce_str" id="nonce_str"  required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="time" class="col-sm-2 control-label">time*</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="time" id="time"  required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="currency" class="col-sm-2 control-label">Order Currency*</label>
+            <div class="col-sm-10">
+                <select name="currency" id="currency" class="form-control" required>
+                    <option value='USD' selected>USD</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="amount" class="col-sm-2 control-label">Order Amount*</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="amount" name="amount"  placeholder="Amount" value="1" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="auth_code" class="col-sm-2 control-label">Payment Code*</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="auth_code" name="auth_code"  placeholder="Auth Code" value="" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="body" class="col-sm-2 control-label">Order Description*</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="body" id="body" placeholder="Order Description" value="测试" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" id="btnSubmit" class="btn btn-default">Submit</button>
+            </div>
+        </div>
+
+        <h4>Request Info</h4>
+        <div class="well">
+            <label id="apiRequestUrlInfo" style="color:green"></label>
+            <br>
+            <label><span id="apiRequest"></span></label>
+        </div>
+        <h4>Response body</h4>
+        <div id="responseBody" class="responseBody"></div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $("#out_trade_no").val(new Date().Format("yyyyMMddHHmmss") + randomString(4));
+        $("#time").val((new Date()).valueOf());
+        $("#nonce_str").val(randomString(10));
+    });
+</script>
+</body>
+</html>
